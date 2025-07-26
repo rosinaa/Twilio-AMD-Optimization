@@ -1,0 +1,33 @@
+# Twilio AMD Audio Analysis Toolkit Requirements
+
+# Core audio processing and analysis
+librosa>=0.10.0
+numpy>=1.21.0
+scipy>=1.9.0
+
+# Data manipulation and visualization
+pandas>=1.5.0
+matplotlib>=3.5.0
+
+# Audio processing
+pydub>=0.25.0
+
+# Web framework for server functionality
+Flask>=2.2.0
+
+# Twilio SDK for API interactions
+twilio>=8.0.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# HTTP requests
+requests>=2.28.0
+
+# Terminal output formatting
+colorama>=0.4.0
+
+# Additional dependencies that may be needed
+# (uncomment if you encounter import errors)
+# soundfile>=0.12.0  # Alternative audio backend for librosa
+# ffmpeg-python>=0.2.0  # Python wrapper for ffmpeg
