@@ -3,9 +3,11 @@ from pydub import AudioSegment
 from pathlib import Path
 
 # --- Config ---
-SOURCE_DIR = Path(".")  # or specify your repo folder
-OUTPUT_DIR = Path("channel_audio")
-OUTPUT_DIR.mkdir(exist_ok=True)
+SOURCE_DIR = Path("recordings")  # or specify your repo folder
+OUTPUT_DIR_LEFT = Path("channel_audio/left")
+OUTPUT_DIR_RIGHT = Path("channel_audio/right")
+OUTPUT_DIR_LEFT.mkdir(exist_ok=True)
+OUTPUT_DIR_RIGHT.mkdir(exist_ok=True)
 
 # --- Process All WAV Files ---
 def split_channels_in_repo():
@@ -27,8 +29,8 @@ def process_wav(wav_path):
         left_channel = audio.split_to_mono()[0]
         right_channel = audio.split_to_mono()[1]
 
-        left_path = OUTPUT_DIR / f"{base_name}_left.wav"
-        right_path = OUTPUT_DIR / f"{base_name}_right.wav"
+        left_path = OUTPUT_DIR_LEFT / f"{base_name}_left.wav"
+        right_path = OUTPUT_DIR_RIGHT / f"{base_name}_right.wav"
 
         left_channel.export(left_path, format="wav")
         right_channel.export(right_path, format="wav")

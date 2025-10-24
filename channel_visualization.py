@@ -2,6 +2,7 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import argparse
 
 def analyze_and_plot(filepath, save_path=None, threshold=0.03, silence_gap_min=0.4, silence_gap_max=2.5):
     # 1. Load audio
@@ -78,4 +79,11 @@ def batch_analyze(input_dir='downloads', output_dir='analysis', threshold=0.03):
         analyze_and_plot(in_path, save_path=out_path, threshold=threshold)
 
 if __name__ == "__main__":
-    batch_analyze(input_dir="channel_audio", output_dir="channel_analysis", threshold=0.03)
+    parser = argparse.ArgumentParser(description="Batch analyzer with parameters")
+    parser.add_argument("--input_dir", required=False, help="Name of input folder with the recordings to analyze", default="channel_audio/left")
+    parser.add_argument("--output_dir", required=False, help="Name of output folder where the png will be saved", default="channel_analysis")
+    parser.add_argument("--threshold", required=False, default=0.03)
+    args = parser.parse_args()
+
+
+    batch_analyze(input_dir=args.input_dir, output_dir=args.output_dir, threshold=args.threshold)

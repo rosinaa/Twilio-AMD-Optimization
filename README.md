@@ -1,4 +1,4 @@
-# Twilio AMD Audio Analysis Toolkit
+# Twilio AMD Audio Analysis Toolkit and Automated AMD Tests
 
 This repository contains tools to analyze Twilio Answering Machine Detection (AMD) performance using `.wav` recordings from real calls. It includes utilities for audio channel separation, event correlation, AMD parameter tuning, and visual inspection of detection behavior.
 
@@ -9,8 +9,8 @@ This repository contains tools to analyze Twilio Answering Machine Detection (AM
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/fvmach/Optimization-Engine.git
-cd Optimization-Engine
+git clone https://github.com/fvmach/Twilio-AMD-Optimization-Engine.git
+cd Twilio-AMD-Optimization-Engine
 ```
 
 ### 2. Install Dependencies
@@ -40,36 +40,98 @@ pip install pydub numpy scipy matplotlib
 
 ## Script Usage
 
-### `split_channels.py`
+### `split_audio_channels.py`
 
-This script scans the repository for all `.wav` files, identifies stereo audio, and splits each into separate mono channel files.
+This script scans the recordings folder for all `.wav` files, identifies stereo audio, splits each into separate mono channel files.
 
 **Usage:**
 
 ```bash
-python split_channels.py
+python split_audio_channels.py
 ```
 
 **Output:**
 
 * Input: Stereo `.wav` files
-* Output: `channel_audio/` folder containing `filename_left.wav` and `filename_right.wav`
+* Output: `channel_audio/left` and `channel_audio/right` folders containing `filename_left.wav` and `filename_right.wav`
 
 ---
 
-### `analyze_events.py` (if included)
+### `channel_visualization.py` 
 
-This script analyzes `.wav` recordings in conjunction with AMD event data (JSON or logs) to produce annotated visualizations.
+This script analyzes `.wav` recordings in the `channel_audio/left` in conjunction with AMD event data (JSON or logs) to produce annotated visualizations.
 
 **Usage:**
 
 ```bash
-python analyze_events.py
+python channel_visualization.py
+```
+
+If you want to change the input folder to analyse, use the `input_dir` parameter:
+
+```bash
+python channel_visualization.py --input_dir channel_audio/right
 ```
 
 **Output:**
 
-* PNG waveform visualizations with markers for speech segments, silence, and AMD detection points
+* PNG waveform visualizations with markers for speech segments, silence, and AMD detection points. The images are stored in the `channel_analysis` folder.
+
+## Run Automated AMD Tests
+
+### Set up Calla and AMD configuration
+
+Update the call and AMD configuration in the `amd_config.json` file. You have to update the following parameters:
+* StatusCallback: "https://{{your_domain}}.ngrok.app/webhook"
+* AsyncAmdStatusCallback: "https://{{your_domain}}.ngrok.app/webhook",
+
+### `recording_urls.csv`
+Add the list of calls and recordings you want to analyze in each batch. The file has to follow the following format: `Call_sid,https://{{your_domain}}.ngrok.app/audio.wav?recording=Recording_file_name_left`
+
+You have to add the file name of the channel you want to analyze. If your callee is in the left channel, then you add the name of the left_channel recording:
+
+https://{{your_domain}}.ngrok.app/audio.wav?recording={{Recording_file_name_left}}
+
+## Example `recording_urls.csv` Contents
+
+CALL_SID,Audio
+CA123abc456ef,https://your_domain.ngrok.app/audio.wav?recording=RE5559963asdf
+CAxxxxxx,https://your_domain.ngrok.app/audio.wav?recording=REaaabbbccc
+
+
+### Running the Flask Server
+
+This file runs the Flask server with the AMD and Status Callback webhooks:
+
+```bash
+python server.py
+```
+
+If you want to change the isolated channel recording to analyze the right channel, use the `audio_dir` parameter:
+
+```bash
+python server.py --audio_dir channel_audio/right
+```
+
+### Run your Ngrok server
+
+```bash
+ngrok http 5000
+```
+
+Then, use the forwarding URL provided by ngrok in your Twilio webhook configuration.
+
+
+### Execute the AMD automated tests
+
+To run all the automated AMD calls executing the `automated_amd_call.py` script.
+
+**Usage:**
+
+```bash
+python automated_amd_call.py
+```
+
 
 ---
 
@@ -100,6 +162,7 @@ This toolkit provides:
 * Annotated waveform visualization with AMD detection markers
 * Parameter impact evaluation across real-world recordings
 * Identification of race conditions or detection anomalies
+* AMD call automation
 
 ---
 
@@ -107,12 +170,16 @@ This toolkit provides:
 
 ```
 .
-├── channel_audio/             # Mono channel files (left/right)
-├── analysis_*.png             # Annotated waveform plots
-├── *.wav                      # Original recordings
+├── channel_audio/left/        # Mono channel files (left)
+├── channel_audio/right/       # Mono channel files (right)
+├── channel_analysis/          # Annotated waveform plots
+├── recordings/*.wav           # Original recordings
+├── reports/                   # CSV log of all the webhooks received
 ├── *.json / *.log             # Optional metadata or AMD event logs
-├── split_channels.py
-├── analyze_events.py
+├── split_audio_channels.py
+├── channel_visualization.py
+├── server.py
+├── automated_amd_call.py
 └── README.md
 ```
 

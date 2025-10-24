@@ -1,14 +1,15 @@
 {
-  "TwimlUrl": "https://handler.twilio.com/twiml/EHe8f84941805aefc6295a6a8af6ab0acf",
-  "StatusCallback": "https://owlbank.ngrok.io/webhook",
+  "StatusCallback": "https://owlbank.ngrok.app/webhook",
   "StatusCallbackMethod": "POST",
   "StatusCallbackEvent": ["initiated", "ringing", "answered", "completed"],
-  "MachineDetection": "Enable",
+  "MachineDetection": "DetectMessageEnd",
   "AsyncAmd": false,
   "AsyncAmdStatusCallbackMethod": "POST",
-  "AsyncAmdStatusCallback": "https://owlbank.ngrok.io/webhook",
-  "MachineDetectionTimeout": 45,
-  "MachineDetectionSpeechThreshold": 1200,
-  "MachineDetectionSpeechEndThreshold": 2000,
-  "MachineDetectionSilenceTimeout": 7000
+  "AsyncAmdStatusCallback": "https://owlbank.ngrok.app/webhook",
+  "MachineDetectionTimeout": 30,
+  "MachineDetectionSpeechThreshold": 2400,
+  "MachineDetectionSpeechEndThreshold": 1200,
+  "MachineDetectionSilenceTimeout": 5000,
+  "Record": false,
+  "RecordingChannels": "dual"
 }

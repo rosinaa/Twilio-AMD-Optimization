@@ -8,9 +8,7 @@ ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
 AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
 FROM_NUMBER = os.getenv('OUTBOUND_PHONE_NUMBER')
 TO_NUMBER = os.getenv('INBOUND_PHONE_NUMBER')
-PUBLIC_DOMAIN = os.environ.get("PUBLIC_DOMAIN", "https://owlbank.ngrok.io")
 
-twiml_url = f"{PUBLIC_DOMAIN}/incoming-call"  # always this endpoint
 
 CONFIG_FILE = "amd_config.json"
 def load_config(filename):
@@ -21,7 +19,8 @@ def build_call_kwargs(config):
     return {
         "from_": FROM_NUMBER,
         "to": TO_NUMBER,
-        "url": twiml_url,
+        # "url": "https://handler.twilio.com/twiml/EH56c629184c34200eb5d1a62005dea828",
+        "twiml": """<?xml version="1.0" encoding="UTF-8"?><Response><Say>Hello! This is an automated message. We'll try you again later.</Say></Response>""",
         "machine_detection": config.get("MachineDetection"),
         "async_amd": config.get("AsyncAmd"),
         "async_amd_status_callback_method": config.get("AsyncAmdStatusCallbackMethod"),
@@ -33,7 +32,9 @@ def build_call_kwargs(config):
          # Status callback for answered_by and call events
         "status_callback": config.get("StatusCallback"),
         "status_callback_method": config.get("StatusCallbackMethod", "POST"),
-        "status_callback_event": config.get("StatusCallbackEvent", ["initiated", "ringing", "answered", "completed"])
+        "status_callback_event": config.get("StatusCallbackEvent", ["initiated", "ringing", "answered", "completed"]),
+        "record": config.get("Record"),
+        "recording_channels": config.get("RecordingChannels")
     }
 
 def main():
@@ -41,7 +42,7 @@ def main():
     client = Client(ACCOUNT_SID, AUTH_TOKEN)
     call_kwargs = build_call_kwargs(config)
     call_kwargs = {k: v for k, v in call_kwargs.items() if v is not None}
-    print(f"Placing call to {TO_NUMBER} via {twiml_url}")
+    print(f"Placing call to {TO_NUMBER}")
     for k, v in call_kwargs.items():
         print(f"  {k}: {v}")
     try:
