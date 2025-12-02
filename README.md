@@ -9,8 +9,8 @@ This repository contains tools to analyze Twilio Answering Machine Detection (AM
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/fvmach/Twilio-AMD-Optimization-Engine.git
-cd Twilio-AMD-Optimization-Engine
+git clone https://github.com/rosinaa/Twilio-AMD-Optimization.git
+cd Twilio-AMD-Optimization
 ```
 
 ### 2. Install Dependencies
@@ -197,4 +197,4 @@ This toolkit provides:
 ## License
 
 MIT License
-© Fernando Vieira Machado
+© Fernando Vieira Machado & Rosina Garcia Bru
