@@ -1,11 +1,11 @@
 {
-  "StatusCallback": "https://owlbank.ngrok.app/webhook",
+  "StatusCallback": "https://your_domain.ngrok.app/webhook",
   "StatusCallbackMethod": "POST",
   "StatusCallbackEvent": ["initiated", "ringing", "answered", "completed"],
   "MachineDetection": "DetectMessageEnd",
   "AsyncAmd": false,
   "AsyncAmdStatusCallbackMethod": "POST",
-  "AsyncAmdStatusCallback": "https://owlbank.ngrok.app/webhook",
+  "AsyncAmdStatusCallback": "https://your_domain.ngrok.app/webhook",
   "MachineDetectionTimeout": 30,
   "MachineDetectionSpeechThreshold": 2400,
   "MachineDetectionSpeechEndThreshold": 1200,
